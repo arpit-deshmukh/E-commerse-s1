@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import product from "./routes/product.js";
 import cart from "./routes/cart.js";
+import order from "./routes/order.js";
 
 
 const app = express();
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use('/api/products', require('./routes/product'));
 app.use('/api/cart', require('./routes/cart'));
+app.use('/api/orders', require('./routes/order'));
+app.use('/api/orders', require('./routes/order'));
 
 
 app.get("/", (req, res) => {
