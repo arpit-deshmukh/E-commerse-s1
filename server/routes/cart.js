@@ -1,7 +1,9 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
 let cart = [];
+
 
 router.post('/add', (req, res) => {
   try {
@@ -12,6 +14,7 @@ router.post('/add', (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 router.get('/', (req, res) => {
   res.json(cart);
@@ -27,4 +30,4 @@ router.delete('/:index', (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
