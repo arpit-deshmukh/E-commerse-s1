@@ -1,24 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import BASE_URL from "../config";
 
 function Cart() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cart')
-      .then(res => res.json())
-      .then(data => setCart(data));
+    const fetchCart = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/cart`);
+        const data = await res.json();
+        setCart(data);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      }
+    };
+
+    fetchCart();
   }, []);
 
   return (
     <div className="container">
       <h2>Cart</h2>
 
-      {cart.map((item, index) => (
-        <div key={index} className="card">
-          <p>{item.name}</p>
-          <p>{item.price}</p>
-        </div>
-      ))}
+      {cart.length === 0 ? (
+        <p>Cart is empty</p>
+      ) : (
+        cart.map((item, index) => (
+          <div key={index} className="card">
+            <p>{item.name}</p>
+            <p>₹{item.price}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 }
