@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import ProductList from './pages/ProductList';
+import ProductList from './pages/ProductList.jsx';
 import Cart from './pages/Cart';
+import Header from './components/Header';
 
 function App() {
   const [page, setPage] = useState('products');
 
   return (
     <div>
-      <h1>My E-commerce</h1>
-
-      <button onClick={() => setPage('products')}>Products</button>
-      <button onClick={() => setPage('cart')}>Cart</button>
+      <Header setPage={setPage} />
 
       {page === 'products' && <ProductList />}
       {page === 'cart' && <Cart />}
