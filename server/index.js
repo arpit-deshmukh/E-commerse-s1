@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/auth.js";
-import productRoutes from "./routes/product.js";
+import productRoutes from "./routes/prod-1.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/order.js";
 
