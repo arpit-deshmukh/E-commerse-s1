@@ -4,6 +4,7 @@ import BASE_URL from "../config";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,18 +36,43 @@ function ProductList() {
     }
   };
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredProducts = products.filter((product) => {
+    if (!normalizedSearch) return true;
+    const name = product.name || "";
+    const category = product.category || "";
+    return (
+      name.toLowerCase().includes(normalizedSearch) ||
+      category.toLowerCase().includes(normalizedSearch)
+    );
+  });
+
   return (
-    <div className="container">
+    <div className="container product-list">
+      <div className="page-header">
+        <h1>Products</h1>
+        <input
+          type="search"
+          value={searchTerm}
+          placeholder="Search by name or category..."
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       {products.length === 0 ? (
-        <p>Loading products...</p>
+        <p className="state-text">Loading products...</p>
+      ) : filteredProducts.length === 0 ? (
+        <p className="state-text">No products found for '{searchTerm}'.</p>
       ) : (
-        products.map((product) => (
-          <ProductCard
-            key={product._id}
-            product={product}
-            onAddToCart={addToCart}
-          />
-        ))
+        <div className="product-grid">
+          {filteredProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              onAddToCart={addToCart}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
