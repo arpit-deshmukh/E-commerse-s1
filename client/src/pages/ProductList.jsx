@@ -5,15 +5,21 @@ import BASE_URL from "../config";
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/products`);
+        if (!res.ok) {
+          const message = `API error %${res.status}: ${res.statusText}`;
+          throw new Error(message);
+        }
         const data = await res.json();
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
+        setError(error.message);
       }
     };
 
@@ -59,7 +65,11 @@ function ProductList() {
         />
       </div>
 
-      {products.length === 0 ? (
+      {error ? (
+        <p className="state-text" style={{ color: "#b91c1c" }}>
+          Failed to load products: {error}
+        </p>
+      ) : products.length === 0 ? (
         <p className="state-text">Loading products...</p>
       ) : filteredProducts.length === 0 ? (
         <p className="state-text">No products found for '{searchTerm}'.</p>
