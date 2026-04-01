@@ -9,13 +9,23 @@ function ProductList() {
       .then(data => setProducts(data));
   }, []);
 
+  const addToCart = async (product) => {
+    await fetch('http://localhost:5000/api/cart/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(product),
+    });
+  };
+
   return (
     <div>
       {products.map((product) => (
         <div key={product._id}>
           <h3>{product.name}</h3>
           <p>{product.price}</p>
-          <button>Add to Cart</button>
+          <button onClick={() => addToCart(product)}>
+            Add to Cart
+          </button>
         </div>
       ))}
     </div>
