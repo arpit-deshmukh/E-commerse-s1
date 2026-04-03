@@ -12,7 +12,7 @@ function ProductList() {
       try {
         const res = await fetch(`${BASE_URL}/api/products`);
         if (!res.ok) {
-          const message = `API error %${res.status}: ${res.statusText}`;
+          const message = `API error ${res.status}: ${res.statusText}`;
           throw new Error(message);
         }
         const data = await res.json();
