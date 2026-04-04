@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function Navbar({ setPage, cartCount = 0 }) {
+function Navbar({ setPage, activePage = 'home', cartCount = 0 }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeLink, setActiveLink] = useState('products');
   const searchInputRef = useRef(null);
 
   useEffect(() => {
@@ -22,7 +21,6 @@ function Navbar({ setPage, cartCount = 0 }) {
     }
   }, [searchOpen]);
 
-  // Close mobile menu on resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) setMobileOpen(false);
@@ -32,12 +30,14 @@ function Navbar({ setPage, cartCount = 0 }) {
   }, []);
 
   const handleNav = (page) => {
-    setActiveLink(page);
     setPage(page);
     setMobileOpen(false);
+    setSearchOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navLinks = [
+    { id: 'home', label: 'Home', icon: homeIcon },
     { id: 'products', label: 'Products', icon: gridIcon },
     { id: 'cart', label: 'Cart', icon: cartIcon },
   ];
@@ -49,7 +49,7 @@ function Navbar({ setPage, cartCount = 0 }) {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
           scrolled
             ? 'bg-gray-950/80 backdrop-blur-xl shadow-2xl shadow-violet-500/5 border-b border-white/5'
-            : 'bg-transparent'
+            : 'bg-gray-950/40 backdrop-blur-md'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,7 +57,7 @@ function Navbar({ setPage, cartCount = 0 }) {
             {/* Logo */}
             <button
               id="navbar-logo"
-              onClick={() => handleNav('products')}
+              onClick={() => handleNav('home')}
               className="flex items-center gap-2.5 group cursor-pointer bg-transparent border-none"
             >
               <div className="relative">
@@ -88,7 +88,7 @@ function Navbar({ setPage, cartCount = 0 }) {
                   id={`nav-link-${link.id}`}
                   onClick={() => handleNav(link.id)}
                   className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer border-none ${
-                    activeLink === link.id
+                    activePage === link.id
                       ? 'text-white bg-white/10'
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
@@ -100,7 +100,7 @@ function Navbar({ setPage, cartCount = 0 }) {
                       {cartCount}
                     </span>
                   )}
-                  {activeLink === link.id && (
+                  {activePage === link.id && (
                     <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
                   )}
                 </button>
@@ -234,7 +234,7 @@ function Navbar({ setPage, cartCount = 0 }) {
                 id={`mobile-nav-${link.id}`}
                 onClick={() => handleNav(link.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer border-none ${
-                  activeLink === link.id
+                  activePage === link.id
                     ? 'text-white bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border-l-2 border-l-violet-500'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
@@ -283,6 +283,15 @@ function Navbar({ setPage, cartCount = 0 }) {
 }
 
 /* ---------- Inline SVG icon helpers ---------- */
+
+function homeIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  );
+}
 
 function gridIcon() {
   return (
